@@ -1,6 +1,6 @@
 {
   "name": "@brillout/bump-dependencies",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "bin": "./bin.js",
   "scripts": {
     "// === Dev ===": "",
