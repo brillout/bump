@@ -5,7 +5,7 @@ import fs from 'fs'
 import path from 'path'
 import assert from 'assert'
 import { findFiles, FindFilter } from './utils'
-const npmCheckUpdates = require.resolve(`${__dirname}/node_modules/.bin/npm-check-updates`)
+const npmCheckUpdates = require.resolve(`${process.cwd()}/node_modules/.bin/npm-check-updates`)
 
 /*
 const FREEZE_VUE = true
