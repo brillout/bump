@@ -4,8 +4,11 @@ import execa from 'execa'
 import fs from 'fs'
 import path from 'path'
 import assert from 'assert'
-import { findFiles, FindFilter } from './utils'
+import { findFiles, FindFilter, logProgress, runCommand } from './utils'
+import { green, bold } from 'picocolors'
 const npmCheckUpdates = require.resolve(`${process.cwd()}/node_modules/.bin/npm-check-updates`)
+
+const iconWarning = '⚠️'
 
 /*
 const FREEZE_VUE = true
@@ -36,17 +39,22 @@ async function bumpDependencies(filter: null | FindFilter) {
     }
     const cwd = path.dirname(packageJsonFile)
     const reject = SKIP_LIST.length === 0 ? '' : `--reject ${SKIP_LIST.join(',')}`
+    console.log('\n')
+    console.log(green(bold(`[UPGRADE] ${cwd}`)))
     const cmd = `${npmCheckUpdates} -u --dep dev,prod ${reject}`
     await run__follow(cmd, { cwd })
     if (!FREEZE_VUE) {
       await run__follow(`${npmCheckUpdates} -u --dep dev,prod vue --target greatest`, { cwd })
     }
   }
-  console.log('[SKIPPED] Deps:\n' + JSON.stringify(SKIP_LIST, null, 2))
-  console.log('[SKIPPED] package.json:\n' + JSON.stringify(skipped, null, 2))
-  console.log('Updating `pnpm-lock.yaml`...')
+  console.log('\n')
+  console.log(green(bold('DONE.')))
+  console.log(iconWarning + ' [SKIPPED] Deps:\n' + JSON.stringify(SKIP_LIST, null, 2))
+  console.log(iconWarning + ' [SKIPPED] package.json:\n' + JSON.stringify(skipped, null, 2))
+  const done = logProgress('Update `pnpm-lock.yaml`')
   await updatePnpmLockFile()
-  console.log('Done.')
+  done()
+  await commit()
 }
 
 async function updatePnpmLockFile() {
@@ -54,8 +62,12 @@ async function updatePnpmLockFile() {
   await run__return('pnpm install', { cwd })
 }
 
+async function commit() {
+  await runCommand("git commit -am 'chore: update dependencies'", { swallowError: true })
+}
+
 async function getAllPackageJsonFiles(filter: null | FindFilter) {
-  const packageJsonFiles = await findFiles('**/tsconfig.json', filter)
+  const packageJsonFiles = await findFiles('**/package.json', filter)
   return packageJsonFiles
 }
 

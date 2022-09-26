@@ -5,6 +5,7 @@ specifiers:
   execa: ^5.1.1
   fast-glob: ^3.2.12
   npm-check-updates: ^11.5.13
+  picocolors: ^1.0.0
   source-map-support: ^0.5.21
   typescript: ^4.8.3
 
@@ -12,6 +13,7 @@ dependencies:
   execa: 5.1.1
   fast-glob: 3.2.12
   npm-check-updates: 11.8.5
+  picocolors: 1.0.0
   source-map-support: 0.5.21
 
 devDependencies:
@@ -1580,6 +1582,10 @@ packages:
 
   /performance-now/2.1.0:
     resolution: {integrity: sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==}
+    dev: false
+
+  /picocolors/1.0.0:
+    resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
     dev: false
 
   /picomatch/2.3.1:
