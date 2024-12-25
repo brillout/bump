@@ -46,7 +46,10 @@ async function parseCliArgs() {
         const bucket = isGlobFilter === '--include' ? 'include' : 'exclude'
         globFilter[bucket].push(arg)
       } else {
-        packagesToBump.push(await parsePackageToBump(arg))
+        const packageName = arg
+        const packageVersionLatest = await getPackageVersionLatest(packageName)
+        const packageVersionSemver = '^' + packageVersionLatest
+        packagesToBump.push({ packageName, packageVersion: packageVersionSemver })
       }
     }
   }
@@ -57,13 +60,9 @@ async function parseCliArgs() {
   }
 }
 
-async function parsePackageToBump(packageArg: string): Promise<PackageToBump> {
-  let [packageName, packageVersion] = packageArg.split('@')
-  if (!packageVersion) {
-    const stdout = await runCommand(`pnpm show ${packageName} version`, { timeout: 20 * 1000 })
-    packageVersion = '^' + stdout.trim()
-  }
-  return { packageName, packageVersion }
+async function getPackageVersionLatest(packageName: string) {
+  const stdout = await runCommand(`pnpm show ${packageName} version`, { timeout: 20 * 1000 })
+  return stdout.trim()
 }
 
 function initPromiseRejectionHandler() {
@@ -79,7 +78,6 @@ function showHelp() {
       'Usage:',
       '  $ bump                      # Bump all dependencies of all the package.json files in the entire monorepo',
       '  $ bump vite                 # Bump all dependency to the `vite` package to its latest version',
-      '  $ bump vite@^6.0.5          # Bump all dependency to the `vite` package to `^6.0.5`',
       "  $ bump --include examples   # Only touch package.json files that contain 'examples' in their path",
       "  $ bump --exclude examples   # Only touch package.json files that don't contain 'examples' in their path",
     ].join('\n'),
