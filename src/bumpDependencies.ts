@@ -10,7 +10,6 @@ import pc from 'picocolors'
 const __filename = new URL('', import.meta.url).pathname
 const __dirname = path.dirname(__filename)
 const npmCheckUpdates = path.join(__dirname, '../node_modules/.bin/npm-check-updates')
-const emojiInfo = 'ℹ️'
 
 /*
 const FREEZE_VUE = true
@@ -39,6 +38,8 @@ type PackageToBump = {
 
 async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: GlobFilter, forceBump: boolean) {
   const skipped: string[] = []
+  let noChange = true
+
   for (const packageJsonFile of await getAllPackageJsonFiles(globFilter)) {
     if (!include(packageJsonFile)) {
       skipped.push(packageJsonFile)
@@ -55,8 +56,10 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
       if (!FREEZE_VUE) {
         await run__follow(`${npmCheckUpdates} -u --dep dev,prod vue --target greatest`, { cwd: packageJsonDir })
       }
+      noChange = false
     } else {
       const packageJson = readPackageJson(packageJsonFile)
+      let noChangeLocal = true
       packagesToBump.forEach(({ packageName, packageSemver }) => {
         const depLists: (undefined | Record<string, string>)[] = [packageJson.dependencies, packageJson.devDependencies]
         depLists.forEach((depList) => {
@@ -64,20 +67,32 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
           if (!packageSemverCurrent) return
           if (!packageSemverCurrent.startsWith('^') && !forceBump) {
             console.log(
-              `${pc.yellow('SKIPPED')} ${pc.cyan(packageName)} which is pinned to ${pc.bold(packageSemverCurrent)} at ${packageJsonFile}`,
+              `${pc.yellow('SKIPPED')} ${pc.cyan(packageName)} because it's pinned to ${pc.bold(packageSemverCurrent)} at ${packageJsonFile}`,
             )
             return
           }
+          if (packageSemverCurrent === packageSemver) return
           depList[packageName] = packageSemver
+          noChangeLocal = false
         })
       })
-      fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson, null, 2) + '\n')
+      if (!noChangeLocal) {
+        fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson, null, 2) + '\n')
+        noChange = false
+      }
     }
   }
-  console.log(pc.green(pc.bold('Done')))
+
+  if (noChange) {
+    console.log(pc.blue(pc.bold('No operation: everything is up-to-date.')))
+    return
+  }
+  console.log(pc.green(pc.bold('Done.')))
+
   const done = logProgress('Update `pnpm-lock.yaml`')
   await updatePnpmLockFile()
   done()
+
   const commitMessage =
     packagesToBump.length === 0
       ? 'chore: bump all dependencies'
