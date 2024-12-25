@@ -7,8 +7,8 @@ initPromiseRejectionHandler()
 cli()
 
 function cli() {
-  const { filter } = findFilesParseCliArgs()
-  bumpDependencies(filter)
+  const { globFilter } = findFilesParseCliArgs()
+  bumpDependencies(globFilter)
 }
 
 function initPromiseRejectionHandler() {

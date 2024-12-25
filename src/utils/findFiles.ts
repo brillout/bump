@@ -53,7 +53,7 @@ function applyFilter(filePathRelative: string, globFilter: null | GlobFilter) {
   return true
 }
 
-function findFilesParseCliArgs(): { filter: null | GlobFilter; debug: boolean } {
+function findFilesParseCliArgs(): { globFilter: null | GlobFilter; debug: boolean } {
   let debug = false
   const terms: string[] = []
   let exclude = false
@@ -67,7 +67,7 @@ function findFilesParseCliArgs(): { filter: null | GlobFilter; debug: boolean } 
     }
   })
 
-  const filter =
+  const globFilter =
     terms.length === 0
       ? null
       : {
@@ -75,7 +75,7 @@ function findFilesParseCliArgs(): { filter: null | GlobFilter; debug: boolean } 
           exclude,
         }
   return {
-    filter,
+    globFilter,
     debug,
   }
 }

@@ -30,9 +30,9 @@ if (FREEZE_VUE) {
   SKIP_LIST.push(...['vue', '@vue/server-renderer', '@vue/compiler-sfc', '@vitejs/plugin-vue', 'vite-plugin-md'])
 }
 
-async function bumpDependencies(filter: null | GlobFilter) {
+async function bumpDependencies(globFilter: null | GlobFilter) {
   const skipped: string[] = []
-  for (const packageJsonFile of await getAllPackageJsonFiles(filter)) {
+  for (const packageJsonFile of await getAllPackageJsonFiles(globFilter)) {
     if (!include(packageJsonFile)) {
       skipped.push(packageJsonFile)
       continue
@@ -66,8 +66,8 @@ async function commit() {
   await runCommand("git commit -am 'chore: update dependencies'", { swallowError: true })
 }
 
-async function getAllPackageJsonFiles(filter: null | GlobFilter) {
-  const packageJsonFiles = await findFiles('**/package.json', filter)
+async function getAllPackageJsonFiles(globFilter: null | GlobFilter) {
+  const packageJsonFiles = await findFiles('**/package.json', globFilter)
   return packageJsonFiles
 }
 
