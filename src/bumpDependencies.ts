@@ -59,9 +59,9 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
       packagesToBump.forEach(({ packageName, packageSemver }) => {
         const depLists: (undefined | Record<string, string>)[] = [packageJson.dependencies, packageJson.devDependencies]
         depLists.forEach((depList) => {
-          if (depList?.[packageName]) {
-            depList[packageName] = packageSemver
-          }
+          const packageSemverCurrent = depList?.[packageName]
+          if (!packageSemverCurrent) return
+          depList[packageName] = packageSemver
         })
       })
       fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson, null, 2) + '\n')
