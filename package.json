@@ -1,9 +1,8 @@
 {
-  "name": "@brillout/bump-dependencies",
+  "name": "@brillout/bump",
   "version": "0.2.1",
   "type": "module",
   "bin": {
-    "bump-dependencies": "./bin.js",
     "bump": "./bin.js"
   },
   "scripts": {
@@ -35,7 +34,7 @@
     "@types/node": "^22.10.2",
     "typescript": "^5.7.2"
   },
-  "repository": "github:brillout/bump-dependencies",
+  "repository": "https://github.com/brillout/bump",
   "files": [
     "dist/"
   ],
