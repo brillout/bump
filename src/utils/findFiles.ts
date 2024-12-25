@@ -1,5 +1,4 @@
 export { findFiles }
-export { findFilesParseCliArgs }
 export type { GlobFilter }
 
 import glob from 'fast-glob'
@@ -52,33 +51,4 @@ function applyFilter(filePathRelative: string, globFilter: GlobFilter) {
     }
   }
   return true
-}
-
-function findFilesParseCliArgs(): { globFilter: GlobFilter; debug: boolean } {
-  const globFilter: GlobFilter = {
-    include: [],
-    exclude: [],
-  }
-
-  let debug = false
-  let isGlobFilter: undefined | '--include' | '--exclude'
-  process.argv.slice(2).forEach((arg) => {
-    if (arg === '--debug') {
-      debug = true
-    } else if (arg === '--include') {
-      isGlobFilter = '--include'
-    } else if (arg === '--exclude') {
-      isGlobFilter = '--exclude'
-    } else {
-      if (isGlobFilter) {
-        const bucket = isGlobFilter === '--include' ? 'include' : 'exclude'
-        globFilter[bucket].push(arg)
-      }
-    }
-  })
-
-  return {
-    globFilter,
-    debug,
-  }
 }
