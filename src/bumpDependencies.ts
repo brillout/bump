@@ -4,7 +4,7 @@ import execa from 'execa'
 import fs from 'fs'
 import path from 'path'
 import assert from 'assert'
-import { findFiles, FindFilter, logProgress, runCommand } from './utils'
+import { findFiles, GlobFilter, logProgress, runCommand } from './utils'
 import { green, bold } from 'picocolors'
 const npmCheckUpdates = require.resolve(`${process.cwd()}/node_modules/.bin/npm-check-updates`)
 
@@ -30,7 +30,7 @@ if (FREEZE_VUE) {
   SKIP_LIST.push(...['vue', '@vue/server-renderer', '@vue/compiler-sfc', '@vitejs/plugin-vue', 'vite-plugin-md'])
 }
 
-async function bumpDependencies(filter: null | FindFilter) {
+async function bumpDependencies(filter: null | GlobFilter) {
   const skipped: string[] = []
   for (const packageJsonFile of await getAllPackageJsonFiles(filter)) {
     if (!include(packageJsonFile)) {
@@ -66,7 +66,7 @@ async function commit() {
   await runCommand("git commit -am 'chore: update dependencies'", { swallowError: true })
 }
 
-async function getAllPackageJsonFiles(filter: null | FindFilter) {
+async function getAllPackageJsonFiles(filter: null | GlobFilter) {
   const packageJsonFiles = await findFiles('**/package.json', filter)
   return packageJsonFiles
 }

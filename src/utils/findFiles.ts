@@ -1,12 +1,12 @@
 export { findFiles }
 export { findFilesParseCliArgs }
-export type { FindFilter }
+export type { GlobFilter }
 
 import glob from 'fast-glob'
 import path from 'path'
 import { runCommand } from './runCommand'
 
-type FindFilter = {
+type GlobFilter = {
   terms: string[]
   exclude: boolean
 }
@@ -14,7 +14,7 @@ type FindFilter = {
 const cwd = process.cwd()
 let gitFiles: string[]
 
-async function findFiles(pattern: string, findFilter: null | FindFilter) {
+async function findFiles(pattern: string, findFilter: null | GlobFilter) {
   let files = (await glob([pattern], { ignore: ['**/node_modules/**', '**/.git/**'], cwd, dot: true }))
     .filter((filePathRelative) => applyFilter(filePathRelative, findFilter))
     .map((filePathRelative) => path.join(cwd, filePathRelative))
@@ -37,7 +37,7 @@ async function filterGitIgnoredFiles(files: string[]): Promise<string[]> {
   return filesFiltered
 }
 
-function applyFilter(filePathRelative: string, findFilter: null | FindFilter) {
+function applyFilter(filePathRelative: string, findFilter: null | GlobFilter) {
   if (!findFilter) {
     return true
   }
@@ -53,7 +53,7 @@ function applyFilter(filePathRelative: string, findFilter: null | FindFilter) {
   return true
 }
 
-function findFilesParseCliArgs(): { filter: null | FindFilter; debug: boolean } {
+function findFilesParseCliArgs(): { filter: null | GlobFilter; debug: boolean } {
   let debug = false
   const terms: string[] = []
   let exclude = false
