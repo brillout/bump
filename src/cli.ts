@@ -9,8 +9,8 @@ initPromiseRejectionHandler()
 cli()
 
 async function cli() {
-  const { globFilter, packagesToBump } = await parseCliArgs()
-  bumpDependencies(packagesToBump, globFilter)
+  const { globFilter, packagesToBump, forceBump } = await parseCliArgs()
+  bumpDependencies(packagesToBump, globFilter, forceBump)
 }
 
 async function parseCliArgs() {
@@ -20,6 +20,7 @@ async function parseCliArgs() {
   }
   const packagesToBump: PackageToBump[] = []
 
+  let forceBump = false
   let isGlobFilter: undefined | '--include' | '--exclude'
   for (const arg of process.argv.slice(2)) {
     if (arg.startsWith('-')) {
@@ -27,6 +28,8 @@ async function parseCliArgs() {
         isGlobFilter = '--include'
       } else if (arg === '--exclude') {
         isGlobFilter = '--exclude'
+      } else if (arg === '--force') {
+        forceBump = true
       } else if (arg === '--version' || arg === '-v') {
         const root = path.join(__dirname, '..')
         const { version } = readPackageJson(path.join(root, './package.json'))
@@ -57,6 +60,7 @@ async function parseCliArgs() {
   return {
     globFilter,
     packagesToBump,
+    forceBump,
   }
 }
 
@@ -76,10 +80,11 @@ function showHelp() {
   console.log(
     [
       'Usage:',
-      '  $ bump                      # Bump all dependencies of all the package.json files in the entire monorepo',
-      '  $ bump vite                 # Bump all dependency to the `vite` package to its latest version',
-      "  $ bump --include examples   # Only touch package.json files that contain 'examples' in their path",
-      "  $ bump --exclude examples   # Only touch package.json files that don't contain 'examples' in their path",
+      '  $ bump                         # Bump all dependencies of all the package.json files in the entire monorepo',
+      '  $ bump some-package            # Bump some-package to its latest version',
+      "  $ bump some-package --force    # Bump some-package even if it's pinned",
+      "  $ bump --include examples      # Only touch package.json files that contain 'examples' in their path",
+      "  $ bump --exclude examples      # Only touch package.json files that don't contain 'examples' in their path",
     ].join('\n'),
   )
 }

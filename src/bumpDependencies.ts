@@ -10,6 +10,7 @@ import pc from 'picocolors'
 const __filename = new URL('', import.meta.url).pathname
 const __dirname = path.dirname(__filename)
 const npmCheckUpdates = path.join(__dirname, '../node_modules/.bin/npm-check-updates')
+const emojiInfo = 'ℹ️'
 
 /*
 const FREEZE_VUE = true
@@ -36,7 +37,7 @@ type PackageToBump = {
   packageSemver: string
 }
 
-async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: GlobFilter) {
+async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: GlobFilter, forceBump: boolean) {
   const skipped: string[] = []
   for (const packageJsonFile of await getAllPackageJsonFiles(globFilter)) {
     if (!include(packageJsonFile)) {
@@ -61,6 +62,12 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
         depLists.forEach((depList) => {
           const packageSemverCurrent = depList?.[packageName]
           if (!packageSemverCurrent) return
+          if (!packageSemverCurrent.startsWith('^') && !forceBump) {
+            console.log(
+              `${pc.yellow('SKIPPED')} ${pc.cyan(packageName)} which is pinned to ${pc.bold(packageSemverCurrent)} at ${packageJsonFile}`,
+            )
+            return
+          }
           depList[packageName] = packageSemver
         })
       })
