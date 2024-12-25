@@ -76,7 +76,8 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
   const done = logProgress('Update `pnpm-lock.yaml`')
   await updatePnpmLockFile()
   done()
-  const commitMessage = 'chore: update dependencies'
+  const commitMessage =
+    packagesToBump.length === 0 ? 'chore: update dependencies' : `chore: update to ${packagesToBump.join(' ')}`
   await commit(commitMessage)
 }
 
