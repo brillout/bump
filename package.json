@@ -1,7 +1,10 @@
 {
   "name": "@brillout/bump-dependencies",
   "version": "0.1.1",
-  "bin": "./bin.js",
+  "bin": {
+    "bump-dependencies": "./bin.js",
+    "bump": "./bin.js"
+  },
   "scripts": {
     "// === Dev ===": "",
     "dev": "tsc --watch",
