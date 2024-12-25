@@ -11,8 +11,6 @@ const __filename = new URL('', import.meta.url).pathname
 const __dirname = path.dirname(__filename)
 const npmCheckUpdates = path.join(__dirname, '../node_modules/.bin/npm-check-updates')
 
-const iconWarning = '⚠️'
-
 /*
 const FREEZE_VUE = true
 /*/
@@ -47,10 +45,10 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
     }
     const cwd = path.dirname(packageJsonFile)
     const reject = SKIP_LIST.length === 0 ? '' : `--reject ${SKIP_LIST.join(',')}`
-    console.log('\n')
-    console.log(pc.green(pc.bold(`[UPGRADE] ${cwd}`)))
 
     if (packagesToBump.length === 0) {
+      console.log('\n')
+      console.log(pc.green(pc.bold(`[UPGRADE] ${cwd}`)))
       const cmd = `${npmCheckUpdates} -u --dep dev,prod ${reject}`
       await run__follow(cmd, { cwd })
       if (!FREEZE_VUE) {
@@ -69,15 +67,14 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
       fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson, null, 2) + '\n')
     }
   }
-  console.log('\n')
-  console.log(pc.green(pc.bold('DONE.')))
-  console.log(iconWarning + ' [SKIPPED] Deps:\n' + JSON.stringify(SKIP_LIST, null, 2))
-  console.log(iconWarning + ' [SKIPPED] package.json:\n' + JSON.stringify(skipped, null, 2))
+  console.log(pc.green(pc.bold('Done')))
   const done = logProgress('Update `pnpm-lock.yaml`')
   await updatePnpmLockFile()
   done()
   const commitMessage =
-    packagesToBump.length === 0 ? 'chore: update dependencies' : `chore: update to ${packagesToBump.join(' ')}`
+    packagesToBump.length === 0
+      ? 'chore: bump all dependencies'
+      : `chore: bump ${packagesToBump.map((p) => p.packageName).join(' ')}`
   await commit(commitMessage)
 }
 
