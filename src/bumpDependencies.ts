@@ -5,7 +5,7 @@ import { execa } from 'execa'
 import fs from 'fs'
 import path from 'path'
 import assert from 'assert'
-import { findFiles, GlobFilter, logProgress, runCommand } from './utils/index.js'
+import { findFiles, GlobFilter, logProgress, readPackageJson, runCommand } from './utils/index.js'
 import pc from 'picocolors'
 const __filename = new URL('', import.meta.url).pathname
 const __dirname = path.dirname(__filename)
@@ -116,15 +116,6 @@ function include(packageJsonFile: string): boolean {
     return true
   }
   return false
-}
-
-function readPackageJson(packageJsonFile: string) {
-  const packageJson: {
-    name?: string
-    dependencies?: Record<string, string>
-    devDependencies?: Record<string, string>
-  } = JSON.parse(fs.readFileSync(packageJsonFile, 'utf8'))
-  return packageJson
 }
 
 function dirHasTest(dir: string) {
