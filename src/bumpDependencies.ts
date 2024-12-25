@@ -17,7 +17,9 @@ const FREEZE_VUE = true
 const FREEZE_VUE = false
 //*/
 
-const SKIP_LIST = [
+// TODO/eventually: don't update pinned dependencies instead of `SKIP_LIST`
+//  - Does https://www.npmjs.com/package/npm-check-updates have an option to skip pinned dependencies? If it doesn't then let's simply read the package.json before running npm-check-updates while setting --reject accordingly.
+const FREEZE_LIST = [
   'node-fetch',
   '@types/node-fetch',
   'p-limit',
@@ -27,7 +29,7 @@ const SKIP_LIST = [
   'webpack', // Telefunc
 ]
 if (FREEZE_VUE) {
-  SKIP_LIST.push(...['vue', '@vue/server-renderer', '@vue/compiler-sfc', '@vitejs/plugin-vue', 'vite-plugin-md'])
+  FREEZE_LIST.push(...['vue', '@vue/server-renderer', '@vue/compiler-sfc', '@vitejs/plugin-vue', 'vite-plugin-md'])
 }
 
 type PackageToBump = {
@@ -46,7 +48,7 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
     }
     if (packagesToBump.length === 0) {
       const packageJsonDir = path.dirname(packageJsonFile)
-      const reject = SKIP_LIST.length === 0 ? '' : `--reject ${SKIP_LIST.join(',')}`
+      const reject = FREEZE_LIST.length === 0 ? '' : `--reject ${FREEZE_LIST.join(',')}`
       console.log('\n')
       console.log(pc.green(pc.bold(`[UPGRADE] ${packageJsonDir}`)))
       const cmd = `${npmCheckUpdates} -u --dep dev,prod ${reject}`
