@@ -76,7 +76,8 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
   const done = logProgress('Update `pnpm-lock.yaml`')
   await updatePnpmLockFile()
   done()
-  await commit()
+  const commitMessage = 'chore: update dependencies'
+  await commit(commitMessage)
 }
 
 async function updatePnpmLockFile() {
@@ -84,8 +85,8 @@ async function updatePnpmLockFile() {
   await run__return('pnpm install', { cwd })
 }
 
-async function commit() {
-  await runCommand("git commit -am 'chore: update dependencies'", { swallowError: true })
+async function commit(commitMessage: string) {
+  await runCommand(`git commit -am '${commitMessage}'`, { swallowError: true })
 }
 
 async function getAllPackageJsonFiles(globFilter: GlobFilter) {
