@@ -1,3 +1,14 @@
+## [0.2.3](https://github.com/brillout/bump/compare/v0.2.2...v0.2.3) (2024-12-25)
+
+
+### Bug Fixes
+
+* improve logging ([f80ddf1](https://github.com/brillout/bump/commit/f80ddf13fd0a73c612862657a829110aa0657be1))
+* simplify and fix cherry-pick bump ([7fb873a](https://github.com/brillout/bump/commit/7fb873a293306ca673938c5b91d807aa31b2b37c))
+* skip pinned dependencies ([0ca12b0](https://github.com/brillout/bump/commit/0ca12b020d5500a8ecf52307b2ae4b3862824156))
+
+
+
 ## [0.2.2](https://github.com/brillout/bump/compare/v0.2.1...v0.2.2) (2024-12-25)
 
 
