@@ -1,3 +1,12 @@
+## [0.2.2](https://github.com/brillout/bump/compare/v0.2.1...v0.2.2) (2024-12-25)
+
+
+### Bug Fixes
+
+* improve --version ([8116ea6](https://github.com/brillout/bump/commit/8116ea6f37aecc7073aca7d999355dea1e8feae8))
+
+
+
 ## [0.2.1](https://github.com/brillout/bump-dependencies/compare/v0.2.0...v0.2.1) (2024-12-25)
 
 
