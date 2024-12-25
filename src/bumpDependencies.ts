@@ -26,7 +26,6 @@ const SKIP_LIST = [
   '@apollo/client',
   'webpack', // Telefunc
 ]
-
 if (FREEZE_VUE) {
   SKIP_LIST.push(...['vue', '@vue/server-renderer', '@vue/compiler-sfc', '@vitejs/plugin-vue', 'vite-plugin-md'])
 }
@@ -45,10 +44,9 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
       skipped.push(packageJsonFile)
       continue
     }
-    const packageJsonDir = path.dirname(packageJsonFile)
-    const reject = SKIP_LIST.length === 0 ? '' : `--reject ${SKIP_LIST.join(',')}`
-
     if (packagesToBump.length === 0) {
+      const packageJsonDir = path.dirname(packageJsonFile)
+      const reject = SKIP_LIST.length === 0 ? '' : `--reject ${SKIP_LIST.join(',')}`
       console.log('\n')
       console.log(pc.green(pc.bold(`[UPGRADE] ${packageJsonDir}`)))
       const cmd = `${npmCheckUpdates} -u --dep dev,prod ${reject}`
