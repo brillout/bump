@@ -1,7 +1,9 @@
-// @ts-ignore
 import 'source-map-support/register.js'
 import { bumpDependencies, type PackageToBump } from './bumpDependencies.js'
-import { runCommand, type GlobFilter } from './utils/index.js'
+import { readPackageJson, runCommand, type GlobFilter } from './utils/index.js'
+import path from 'path'
+const __filename = new URL('', import.meta.url).pathname
+const __dirname = path.dirname(__filename)
 
 initPromiseRejectionHandler()
 cli()
@@ -20,11 +22,15 @@ async function parseCliArgs() {
 
   let isGlobFilter: undefined | '--include' | '--exclude'
   for (const arg of process.argv.slice(2)) {
-    if (arg.startsWith('--')) {
+    if (arg.startsWith('-')) {
       if (arg === '--include') {
         isGlobFilter = '--include'
       } else if (arg === '--exclude') {
         isGlobFilter = '--exclude'
+      } else if (arg === '--version' || arg === '-v') {
+        const { version } = readPackageJson(path.join(__dirname, '../package.json'))
+        console.log(version!)
+        process.exit(1)
       } else if (arg === '--help' || arg === '-h') {
         showHelp()
         process.exit(1)
