@@ -55,23 +55,28 @@ function applyFilter(filePathRelative: string, globFilter: GlobFilter) {
 }
 
 function findFilesParseCliArgs(): { globFilter: GlobFilter; debug: boolean } {
+  const globFilter: GlobFilter = {
+    include: [],
+    exclude: [],
+  }
+
   let debug = false
-  const terms: string[] = []
-  let exclude = false
+  let isGlobFilter: undefined | '--include' | '--exclude'
   process.argv.slice(2).forEach((arg) => {
     if (arg === '--debug') {
       debug = true
+    } else if (arg === '--include') {
+      isGlobFilter = '--include'
     } else if (arg === '--exclude') {
-      exclude = true
+      isGlobFilter = '--exclude'
     } else {
-      terms.push(arg)
+      if (isGlobFilter) {
+        const bucket = isGlobFilter === '--include' ? 'include' : 'exclude'
+        globFilter[bucket].push(arg)
+      }
     }
   })
 
-  const globFilter = {
-    include: !exclude ? terms : [],
-    exclude: exclude ? terms : [],
-  }
   return {
     globFilter,
     debug,
