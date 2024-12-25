@@ -14,9 +14,9 @@ type GlobFilter = {
 const cwd = process.cwd()
 let gitFiles: string[]
 
-async function findFiles(pattern: string, findFilter: null | GlobFilter) {
+async function findFiles(pattern: string, globFilter: null | GlobFilter) {
   let files = (await glob([pattern], { ignore: ['**/node_modules/**', '**/.git/**'], cwd, dot: true }))
-    .filter((filePathRelative) => applyFilter(filePathRelative, findFilter))
+    .filter((filePathRelative) => applyFilter(filePathRelative, globFilter))
     .map((filePathRelative) => path.join(cwd, filePathRelative))
   files = await filterGitIgnoredFiles(files)
   return files
@@ -37,11 +37,11 @@ async function filterGitIgnoredFiles(files: string[]): Promise<string[]> {
   return filesFiltered
 }
 
-function applyFilter(filePathRelative: string, findFilter: null | GlobFilter) {
-  if (!findFilter) {
+function applyFilter(filePathRelative: string, globFilter: null | GlobFilter) {
+  if (!globFilter) {
     return true
   }
-  const { terms, exclude } = findFilter
+  const { terms, exclude } = globFilter
   for (const term of terms) {
     if (!filePathRelative.includes(term) && !exclude) {
       return false
