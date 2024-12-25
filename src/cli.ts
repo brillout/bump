@@ -19,14 +19,19 @@ function parseCliArgs() {
   const packagesToBump: PackageToBump[] = []
 
   let isGlobFilter: undefined | '--include' | '--exclude'
-  process.argv.slice(2).forEach((arg) => {
+  for (const arg of process.argv.slice(2)) {
     if (arg.startsWith('--')) {
       if (arg === '--include') {
         isGlobFilter = '--include'
       } else if (arg === '--exclude') {
         isGlobFilter = '--exclude'
+      } else if (arg === '--help' || arg === '-h') {
+        showHelp()
+        process.exit(1)
       } else {
-        throw new Error('Unknown option ' + arg)
+        console.error('Unknown option ' + arg)
+        showHelp()
+        process.exit(1)
       }
     } else {
       if (isGlobFilter) {
@@ -36,7 +41,7 @@ function parseCliArgs() {
         packagesToBump.push(parsePackageToBump(arg))
       }
     }
-  })
+  }
 
   return {
     globFilter,
@@ -46,7 +51,11 @@ function parseCliArgs() {
 
 function parsePackageToBump(packageArg: string): PackageToBump {
   const [packageName, packageVersion] = packageArg.split('@')
-  if (!packageVersion) throw new Error(`Specify version for ${packageName} to bump to`)
+  if (!packageVersion) {
+    console.error(`Specify version for ${packageName} to bump to`)
+    showHelp()
+    process.exit(1)
+  }
   return { packageName, packageVersion }
 }
 
@@ -55,4 +64,16 @@ function initPromiseRejectionHandler() {
     console.error(err)
     process.exit(1)
   })
+}
+
+function showHelp() {
+  console.log(
+    [
+      'Usage:',
+      '  $ bump                      # Bump all dependencies of all the package.json files in the entire monorepo',
+      "  $ bump --include examples   # Only touch package.json files that contain 'examples' in their path",
+      "  $ bump --exclude examples   # Only touch package.json files that don't contain 'examples' in their path",
+      '  $ bump vite@^6.0.5          # Bump all dependency to the `vite` package to `^6.0.5`',
+    ].join('\n'),
+  )
 }
