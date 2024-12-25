@@ -14,8 +14,10 @@
     "format": "biome format --write .",
     "format:check": "biome format . || echo Fix formatting by running: $ pnpm run format",
     "========= Release": "",
-    "prepublishOnly": "pnpm run build",
-    "release": "npm version patch && npm publish && git push && git push --tags"
+    "release": "release-me patch",
+    "release:minor": "release-me minor",
+    "release:major": "release-me major",
+    "release:commit": "release-me commit"
   },
   "dependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -26,6 +28,7 @@
     "source-map-support": "^0.5.21"
   },
   "devDependencies": {
+    "@brillout/release-me": "^0.4.2",
     "@types/node": "^15.6.1",
     "typescript": "^4.8.3"
   },
