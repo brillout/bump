@@ -33,7 +33,7 @@ if (FREEZE_VUE) {
 
 type PackageToBump = {
   packageName: string
-  packageVersion: string
+  packageSemver: string
 }
 
 async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: GlobFilter) {
@@ -56,11 +56,11 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
       }
     } else {
       const packageJson = readPackageJson(packageJsonFile)
-      packagesToBump.forEach(({ packageName, packageVersion }) => {
+      packagesToBump.forEach(({ packageName, packageSemver }) => {
         const depLists: (undefined | Record<string, string>)[] = [packageJson.dependencies, packageJson.devDependencies]
         depLists.forEach((depList) => {
           if (depList?.[packageName]) {
-            depList[packageName] = packageVersion
+            depList[packageName] = packageSemver
           }
         })
       })

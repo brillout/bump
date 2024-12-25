@@ -48,8 +48,8 @@ async function parseCliArgs() {
       } else {
         const packageName = arg
         const packageVersionLatest = await getPackageVersionLatest(packageName)
-        const packageVersionSemver = '^' + packageVersionLatest
-        packagesToBump.push({ packageName, packageVersion: packageVersionSemver })
+        const packageSemver = '^' + packageVersionLatest
+        packagesToBump.push({ packageName, packageSemver })
       }
     }
   }
