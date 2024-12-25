@@ -17,7 +17,9 @@
     "release": "release-me patch",
     "release:minor": "release-me minor",
     "release:major": "release-me major",
-    "release:commit": "release-me commit"
+    "release:commit": "release-me commit",
+    "========= Reset": "",
+    "reset": "git clean -Xdf && pnpm install && pnpm run build"
   },
   "dependencies": {
     "@biomejs/biome": "^1.9.4",
