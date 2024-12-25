@@ -66,7 +66,7 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
           }
         })
       })
-      fs.readFileSync(JSON.stringify(packageJsonFile, null, 2))
+      fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson, null, 2))
     }
   }
   console.log('\n')
