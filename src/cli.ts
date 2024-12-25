@@ -28,8 +28,10 @@ async function parseCliArgs() {
       } else if (arg === '--exclude') {
         isGlobFilter = '--exclude'
       } else if (arg === '--version' || arg === '-v') {
-        const { version } = readPackageJson(path.join(__dirname, '../package.json'))
+        const root = path.join(__dirname, '..')
+        const { version } = readPackageJson(path.join(root, './package.json'))
         console.log(version!)
+        console.log(root)
         process.exit(1)
       } else if (arg === '--help' || arg === '-h') {
         showHelp()
