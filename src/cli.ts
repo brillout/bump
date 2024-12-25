@@ -20,10 +20,14 @@ function parseCliArgs() {
 
   let isGlobFilter: undefined | '--include' | '--exclude'
   process.argv.slice(2).forEach((arg) => {
-    if (arg === '--include') {
-      isGlobFilter = '--include'
-    } else if (arg === '--exclude') {
-      isGlobFilter = '--exclude'
+    if (arg.startsWith('--')) {
+      if (arg === '--include') {
+        isGlobFilter = '--include'
+      } else if (arg === '--exclude') {
+        isGlobFilter = '--exclude'
+      } else {
+        throw new Error('Unknown option ' + arg)
+      }
     } else {
       if (isGlobFilter) {
         const bucket = isGlobFilter === '--include' ? 'include' : 'exclude'
