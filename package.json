@@ -6,15 +6,19 @@
     "bump": "./bin.js"
   },
   "scripts": {
-    "// === Dev ===": "",
+    "========= Dev": "",
     "dev": "tsc --watch",
-    "// === Build ===": "",
+    "========= Build": "",
     "build": "rm -rf dist/ && tsc",
-    "// === Release ===": "",
+    "========= Formatting": "",
+    "format": "biome format --write .",
+    "format:check": "biome format . || echo Fix formatting by running: $ pnpm run format",
+    "========= Release": "",
     "prepublishOnly": "pnpm run build",
     "release": "npm version patch && npm publish && git push && git push --tags"
   },
   "dependencies": {
+    "@biomejs/biome": "^1.9.4",
     "execa": "^5.1.1",
     "fast-glob": "^3.2.12",
     "npm-check-updates": "^11.5.13",
