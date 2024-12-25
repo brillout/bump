@@ -1,13 +1,15 @@
 export { bumpDependencies }
 export { PackageToBump }
 
-import execa from 'execa'
+import { execa } from 'execa'
 import fs from 'fs'
 import path from 'path'
 import assert from 'assert'
-import { findFiles, GlobFilter, logProgress, runCommand } from './utils'
-import { green, bold } from 'picocolors'
-const npmCheckUpdates = require.resolve(`${process.cwd()}/node_modules/.bin/npm-check-updates`)
+import { findFiles, GlobFilter, logProgress, runCommand } from './utils/index.js'
+import pc from 'picocolors'
+const __filename = new URL('', import.meta.url).pathname
+const __dirname = path.dirname(__filename)
+const npmCheckUpdates = path.join(__dirname, '../node_modules/.bin/npm-check-updates')
 
 const iconWarning = '⚠️'
 
@@ -46,7 +48,7 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
     const cwd = path.dirname(packageJsonFile)
     const reject = SKIP_LIST.length === 0 ? '' : `--reject ${SKIP_LIST.join(',')}`
     console.log('\n')
-    console.log(green(bold(`[UPGRADE] ${cwd}`)))
+    console.log(pc.green(pc.bold(`[UPGRADE] ${cwd}`)))
 
     if (packagesToBump.length === 0) {
       const cmd = `${npmCheckUpdates} -u --dep dev,prod ${reject}`
@@ -55,12 +57,12 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
         await run__follow(`${npmCheckUpdates} -u --dep dev,prod vue --target greatest`, { cwd })
       }
     } else {
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonFile, 'utf8'))
+      const packageJson = readPackageJson(packageJsonFile)
       packagesToBump.forEach(({ packageName, packageVersion }) => {
         const depLists: (undefined | Record<string, string>)[] = [packageJson.dependencies, packageJson.devDependencies]
         depLists.forEach((depList) => {
           if (depList?.[packageName]) {
-            packageJson.dependencies[packageName] = packageVersion
+            depList[packageName] = packageVersion
           }
         })
       })
@@ -68,7 +70,7 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
     }
   }
   console.log('\n')
-  console.log(green(bold('DONE.')))
+  console.log(pc.green(pc.bold('DONE.')))
   console.log(iconWarning + ' [SKIPPED] Deps:\n' + JSON.stringify(SKIP_LIST, null, 2))
   console.log(iconWarning + ' [SKIPPED] package.json:\n' + JSON.stringify(skipped, null, 2))
   const done = logProgress('Update `pnpm-lock.yaml`')
@@ -104,7 +106,7 @@ async function run__return(cmd: string, { cwd }: { cwd: string }): Promise<strin
 function include(packageJsonFile: string): boolean {
   const dir = path.dirname(packageJsonFile)
   assert(path.isAbsolute(dir))
-  const packageJson: { name?: string } = require(packageJsonFile)
+  const packageJson: { name?: string } = readPackageJson(packageJsonFile)
   if (packageJson.name && !packageJson.name.startsWith('create-')) {
     return true
   }
@@ -115,6 +117,15 @@ function include(packageJsonFile: string): boolean {
     return true
   }
   return false
+}
+
+function readPackageJson(packageJsonFile: string) {
+  const packageJson: {
+    name?: string
+    dependencies?: Record<string, string>
+    devDependencies?: Record<string, string>
+  } = JSON.parse(fs.readFileSync(packageJsonFile, 'utf8'))
+  return packageJson
 }
 
 function dirHasTest(dir: string) {

@@ -3,7 +3,7 @@ export type { GlobFilter }
 
 import glob from 'fast-glob'
 import path from 'path'
-import { runCommand } from './runCommand'
+import { runCommand } from './runCommand.js'
 
 type GlobFilter = {
   include: string[]

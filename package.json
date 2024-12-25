@@ -1,6 +1,7 @@
 {
   "name": "@brillout/bump-dependencies",
   "version": "0.2.0",
+  "type": "module",
   "bin": {
     "bump-dependencies": "./bin.js",
     "bump": "./bin.js"

@@ -1,7 +1,7 @@
 // @ts-ignore
-import 'source-map-support/register'
-import { bumpDependencies, type PackageToBump } from './bumpDependencies'
-import type { GlobFilter } from './utils'
+import 'source-map-support/register.js'
+import { bumpDependencies, type PackageToBump } from './bumpDependencies.js'
+import type { GlobFilter } from './utils/index.js'
 
 initPromiseRejectionHandler()
 cli()
