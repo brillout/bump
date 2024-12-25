@@ -43,16 +43,16 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
       skipped.push(packageJsonFile)
       continue
     }
-    const cwd = path.dirname(packageJsonFile)
+    const packageJsonDir = path.dirname(packageJsonFile)
     const reject = SKIP_LIST.length === 0 ? '' : `--reject ${SKIP_LIST.join(',')}`
 
     if (packagesToBump.length === 0) {
       console.log('\n')
-      console.log(pc.green(pc.bold(`[UPGRADE] ${cwd}`)))
+      console.log(pc.green(pc.bold(`[UPGRADE] ${packageJsonDir}`)))
       const cmd = `${npmCheckUpdates} -u --dep dev,prod ${reject}`
-      await run__follow(cmd, { cwd })
+      await run__follow(cmd, { cwd: packageJsonDir })
       if (!FREEZE_VUE) {
-        await run__follow(`${npmCheckUpdates} -u --dep dev,prod vue --target greatest`, { cwd })
+        await run__follow(`${npmCheckUpdates} -u --dep dev,prod vue --target greatest`, { cwd: packageJsonDir })
       }
     } else {
       const packageJson = readPackageJson(packageJsonFile)
