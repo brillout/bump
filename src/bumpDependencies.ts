@@ -1,4 +1,5 @@
 export { bumpDependencies }
+export { PackageToBump }
 
 import execa from 'execa'
 import fs from 'fs'
@@ -30,7 +31,12 @@ if (FREEZE_VUE) {
   SKIP_LIST.push(...['vue', '@vue/server-renderer', '@vue/compiler-sfc', '@vitejs/plugin-vue', 'vite-plugin-md'])
 }
 
-async function bumpDependencies(globFilter: GlobFilter) {
+type PackageToBump = {
+  packageName: string
+  packageVersion: string
+}
+
+async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: GlobFilter) {
   const skipped: string[] = []
   for (const packageJsonFile of await getAllPackageJsonFiles(globFilter)) {
     if (!include(packageJsonFile)) {
@@ -41,10 +47,24 @@ async function bumpDependencies(globFilter: GlobFilter) {
     const reject = SKIP_LIST.length === 0 ? '' : `--reject ${SKIP_LIST.join(',')}`
     console.log('\n')
     console.log(green(bold(`[UPGRADE] ${cwd}`)))
-    const cmd = `${npmCheckUpdates} -u --dep dev,prod ${reject}`
-    await run__follow(cmd, { cwd })
-    if (!FREEZE_VUE) {
-      await run__follow(`${npmCheckUpdates} -u --dep dev,prod vue --target greatest`, { cwd })
+
+    if (packagesToBump.length === 0) {
+      const cmd = `${npmCheckUpdates} -u --dep dev,prod ${reject}`
+      await run__follow(cmd, { cwd })
+      if (!FREEZE_VUE) {
+        await run__follow(`${npmCheckUpdates} -u --dep dev,prod vue --target greatest`, { cwd })
+      }
+    } else {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonFile, 'utf8'))
+      packagesToBump.forEach(({ packageName, packageVersion }) => {
+        const depLists: (undefined | Record<string, string>)[] = [packageJson.dependencies, packageJson.devDependencies]
+        depLists.forEach((depList) => {
+          if (depList?.[packageName]) {
+            packageJson.dependencies[packageName] = packageVersion
+          }
+        })
+      })
+      fs.readFileSync(JSON.stringify(packageJsonFile, null, 2))
     }
   }
   console.log('\n')

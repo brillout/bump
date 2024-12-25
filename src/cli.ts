@@ -1,14 +1,14 @@
 // @ts-ignore
 import 'source-map-support/register'
-import { bumpDependencies } from './bumpDependencies'
+import { bumpDependencies, type PackageToBump } from './bumpDependencies'
 import type { GlobFilter } from './utils'
 
 initPromiseRejectionHandler()
 cli()
 
 function cli() {
-  const { globFilter } = parseCliArgs()
-  bumpDependencies(globFilter)
+  const { globFilter, packagesToBump } = parseCliArgs()
+  bumpDependencies(packagesToBump, globFilter)
 }
 
 function parseCliArgs() {
@@ -16,13 +16,11 @@ function parseCliArgs() {
     include: [],
     exclude: [],
   }
+  const packagesToBump: PackageToBump[] = []
 
-  let debug = false
   let isGlobFilter: undefined | '--include' | '--exclude'
   process.argv.slice(2).forEach((arg) => {
-    if (arg === '--debug') {
-      debug = true
-    } else if (arg === '--include') {
+    if (arg === '--include') {
       isGlobFilter = '--include'
     } else if (arg === '--exclude') {
       isGlobFilter = '--exclude'
@@ -30,14 +28,22 @@ function parseCliArgs() {
       if (isGlobFilter) {
         const bucket = isGlobFilter === '--include' ? 'include' : 'exclude'
         globFilter[bucket].push(arg)
+      } else {
+        packagesToBump.push(parsePackageToBump(arg))
       }
     }
   })
 
   return {
     globFilter,
-    debug,
+    packagesToBump,
   }
+}
+
+function parsePackageToBump(packageArg: string): PackageToBump {
+  const [packageName, packageVersion] = packageArg.split('@')
+  if (!packageVersion) throw new Error(`Specify version for ${packageName} to bump to`)
+  return { packageName, packageVersion }
 }
 
 function initPromiseRejectionHandler() {
