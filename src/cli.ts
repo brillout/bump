@@ -65,7 +65,7 @@ async function parseCliArgs() {
 }
 
 async function getPackageVersionLatest(packageName: string) {
-  const stdout = await runCommand(`pnpm show ${packageName} version`, { timeout: 20 * 1000 })
+  const stdout = await runCommand(`npm show ${packageName} version`, { timeout: 20 * 1000 })
   return stdout.trim()
 }
 
