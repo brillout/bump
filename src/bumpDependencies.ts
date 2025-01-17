@@ -42,10 +42,12 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
   let noChange = true
 
   for (const packageJsonFile of await getAllPackageJsonFiles(globFilter)) {
+    /* Re-implement this logic?
     if (!include(packageJsonFile)) {
       skipped.push(packageJsonFile)
       continue
     }
+    */
     if (packagesToBump.length === 0) {
       const packageJsonDir = path.dirname(packageJsonFile)
       const reject = FREEZE_LIST.length === 0 ? '' : `--reject ${FREEZE_LIST.join(',')}`
