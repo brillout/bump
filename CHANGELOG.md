@@ -1,3 +1,13 @@
+## [0.2.4](https://github.com/brillout/bump/compare/v0.2.3...v0.2.4) (2025-01-17)
+
+
+### Bug Fixes
+
+* remove old skip logic ([bbf7d86](https://github.com/brillout/bump/commit/bbf7d86c91b2303f3572da567ae44b80534624a9))
+* use npm show instead of pnpm show ([4536fae](https://github.com/brillout/bump/commit/4536fae7172dbfdc978890e50369f3776d87d216))
+
+
+
 ## [0.2.3](https://github.com/brillout/bump/compare/v0.2.2...v0.2.3) (2024-12-25)
 
 
