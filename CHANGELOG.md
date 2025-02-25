@@ -1,3 +1,12 @@
+## [0.2.5](https://github.com/brillout/bump/compare/v0.2.4...v0.2.5) (2025-02-25)
+
+
+### Features
+
+* pin ([3a44d3b](https://github.com/brillout/bump/commit/3a44d3bbebe0c189889b2058b41ec24fa9afb4e4))
+
+
+
 ## [0.2.4](https://github.com/brillout/bump/compare/v0.2.3...v0.2.4) (2025-01-17)
 
 
