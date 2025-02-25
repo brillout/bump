@@ -49,9 +49,14 @@ async function parseCliArgs() {
         const bucket = isGlobFilter === '--include' ? 'include' : 'exclude'
         globFilter[bucket].push(arg)
       } else {
-        const packageName = arg
-        const packageVersionLatest = await getPackageVersionLatest(packageName)
-        const packageSemver = '^' + packageVersionLatest
+        const { packageName, packageVersion } = parseNpmPackage(arg)
+        let packageSemver: string
+        if (packageVersion) {
+          packageSemver = packageVersion
+        } else {
+          const packageVersionLatest = await getPackageVersionLatest(packageName)
+          packageSemver = '^' + packageVersionLatest
+        }
         packagesToBump.push({ packageName, packageSemver })
       }
     }
@@ -61,6 +66,18 @@ async function parseCliArgs() {
     globFilter,
     packagesToBump,
     forceBump,
+  }
+}
+
+function parseNpmPackage(input: string): { packageName: string; packageVersion: string | null } {
+  const parts = input.split('@')
+  if (parts.length === 1) {
+    return { packageName: input, packageVersion: null }
+  }
+  if (input.startsWith('@')) {
+    return { packageName: `@${parts[1]}`, packageVersion: parts[2] } // Scoped package
+  } else {
+    return { packageName: parts[0], packageVersion: parts[1] } // Regular package
   }
 }
 
@@ -80,9 +97,10 @@ function showHelp() {
   console.log(
     [
       'Usage:',
-      '  $ bump                         # Bump all dependencies of all the package.json files in the entire monorepo',
+      '  $ bump                         # Bump all dependencies of all the package.json files',
       '  $ bump some-package            # Bump some-package to its latest version',
       "  $ bump some-package --force    # Bump some-package even if it's pinned",
+      '  $ bump some-package@1.2.3      # Pin some-package to 1.2.3',
       "  $ bump --include examples      # Only touch package.json files that contain 'examples' in their path",
       "  $ bump --exclude examples      # Only touch package.json files that don't contain 'examples' in their path",
     ].join('\n'),

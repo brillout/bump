@@ -98,7 +98,7 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
   const commitMessage =
     packagesToBump.length === 0
       ? 'chore: bump all dependencies'
-      : `chore: bump ${packagesToBump.map((p) => p.packageName).join(' ')}`
+      : `chore: ${packagesToBump.map((p) => `${p.packageName}@${p.packageSemver}`).join(' ')}`
   await commit(commitMessage)
 }
 
