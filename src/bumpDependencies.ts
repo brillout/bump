@@ -71,7 +71,7 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
         depLists.forEach((depList) => {
           const packageSemverCurrent = depList?.[packageName]
           if (!packageSemverCurrent) return
-          if (!packageSemverCurrent.startsWith('^') && !forceBump) {
+          if (/^[0-9]/.test(packageSemverCurrent) && !forceBump) {
             console.log(
               `${pc.yellow('SKIPPED')} ${pc.cyan(packageName)} because it's pinned to ${pc.bold(packageSemverCurrent)} at ${packageJsonFile}`,
             )
