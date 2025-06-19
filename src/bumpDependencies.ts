@@ -63,7 +63,11 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
       const packageJson = readPackageJson(packageJsonFile)
       let noChangeLocal = true
       packagesToBump.forEach(({ packageName, packageSemver }) => {
-        const depLists: (undefined | Record<string, string>)[] = [packageJson.dependencies, packageJson.devDependencies]
+        const depLists: (undefined | Record<string, string>)[] = [
+          packageJson.dependencies,
+          packageJson.devDependencies,
+          packageJson.pnpm?.overrides,
+        ]
         depLists.forEach((depList) => {
           const packageSemverCurrent = depList?.[packageName]
           if (!packageSemverCurrent) return
