@@ -1,3 +1,12 @@
+## [0.2.6](https://github.com/brillout/bump/compare/v0.2.5...v0.2.6) (2025-06-19)
+
+
+### Bug Fixes
+
+* also bump pnpm.overrides ([f7673aa](https://github.com/brillout/bump/commit/f7673aa4a2939bd69acbcfb3c8ffc74af81f9935))
+
+
+
 ## [0.2.5](https://github.com/brillout/bump/compare/v0.2.4...v0.2.5) (2025-02-25)
 
 
