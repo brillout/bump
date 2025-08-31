@@ -35,6 +35,7 @@ if (FREEZE_VUE) {
 type PackageToBump = {
   packageName: string
   packageSemver: string
+  packageWasFound?: true
 }
 
 async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: GlobFilter, forceBump: boolean) {
@@ -61,7 +62,8 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
     } else {
       const packageJson = readPackageJson(packageJsonFile)
       let noChangeLocal = true
-      packagesToBump.forEach(({ packageName, packageSemver }) => {
+      packagesToBump.forEach((pkg) => {
+        const { packageName, packageSemver } = pkg
         const depLists: (undefined | Record<string, string>)[] = [
           packageJson.dependencies,
           packageJson.devDependencies,
@@ -70,6 +72,7 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
         depLists.forEach((depList) => {
           const packageSemverCurrent = depList?.[packageName]
           if (!packageSemverCurrent) return
+          pkg.packageWasFound = true
           if (/^[0-9]/.test(packageSemverCurrent) && !forceBump) {
             console.log(
               `${pc.yellow('SKIPPED')} ${pc.cyan(packageName)} because it's pinned to ${pc.bold(packageSemverCurrent)} at ${packageJsonFile}`,
@@ -87,6 +90,13 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
       }
     }
   }
+
+  packagesToBump.forEach(({ packageName, packageWasFound }) => {
+    if (!packageWasFound) {
+      console.error(pc.red(pc.bold(`Package ${packageName} not found.`)))
+      process.exit(1)
+    }
+  })
 
   if (noChange) {
     console.log(pc.blue(pc.bold('No operation: everything is up-to-date.')))
