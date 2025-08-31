@@ -1,3 +1,13 @@
+## [0.2.7](https://github.com/brillout/bump/compare/v0.2.6...v0.2.7) (2025-08-31)
+
+
+### Bug Fixes
+
+* better pinned version check ([367e06e](https://github.com/brillout/bump/commit/367e06ecfe18950b195a3d30bbfb8c05ada28d46))
+* throw error if a package wasn't found ([708eb62](https://github.com/brillout/bump/commit/708eb62b5cb713176798999b2acaaaf681c28ea3))
+
+
+
 ## [0.2.6](https://github.com/brillout/bump/compare/v0.2.5...v0.2.6) (2025-06-19)
 
 
