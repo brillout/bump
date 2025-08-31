@@ -38,7 +38,6 @@ type PackageToBump = {
 }
 
 async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: GlobFilter, forceBump: boolean) {
-  const skipped: string[] = []
   let noChange = true
 
   for (const packageJsonFile of await getAllPackageJsonFiles(globFilter)) {
