@@ -28,7 +28,7 @@ async function parseCliArgs() {
         isGlobFilter = '--include'
       } else if (arg === '--exclude') {
         isGlobFilter = '--exclude'
-      } else if (arg === '--force') {
+      } else if (arg === '--force' || arg === '-f') {
         forceBump = true
       } else if (arg === '--version' || arg === '-v') {
         const root = path.join(__dirname, '..')
@@ -98,11 +98,17 @@ function showHelp() {
     [
       'Usage:',
       '  $ bump                         # Bump all dependencies of all the package.json files',
+      '',
       '  $ bump some-package            # Bump some-package to its latest version',
       "  $ bump some-package --force    # Bump some-package even if it's pinned",
+      '  $ bump some-package -f         # Alias for --force',
       '  $ bump some-package@1.2.3      # Pin some-package to 1.2.3',
+      '',
       "  $ bump --include examples      # Only touch package.json files that contain 'examples' in their path",
       "  $ bump --exclude examples      # Only touch package.json files that don't contain 'examples' in their path",
+      '',
+      '  $ bump --version               # Show version',
+      '  $ bump --v                     # Alias for --version',
     ].join('\n'),
   )
 }
