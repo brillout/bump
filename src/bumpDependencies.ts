@@ -93,7 +93,7 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
 
   packagesToBump.forEach(({ packageName, packageWasFound }) => {
     if (!packageWasFound) {
-      console.error(pc.red(pc.bold(`Package ${packageName} not found.`)))
+      console.error(pc.red(`Package ${pc.bold(packageName)} not found in any ${pc.bold('package.json')} file.`))
       process.exit(1)
     }
   })
