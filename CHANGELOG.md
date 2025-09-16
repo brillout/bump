@@ -1,3 +1,13 @@
+## [0.2.8](https://github.com/brillout/bump/compare/v0.2.7...v0.2.8) (2025-09-16)
+
+
+### Bug Fixes
+
+* improve err msg ([64ee914](https://github.com/brillout/bump/commit/64ee9143024ebb4d2e410c84274ece13c4bcfbcb))
+* update usage help ([ac2fd4c](https://github.com/brillout/bump/commit/ac2fd4c54c5c73eee37cd5d9fd73a40a4fc0697f))
+
+
+
 ## [0.2.7](https://github.com/brillout/bump/compare/v0.2.6...v0.2.7) (2025-08-31)
 
 
