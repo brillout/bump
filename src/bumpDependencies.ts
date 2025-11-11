@@ -58,10 +58,17 @@ async function bumpDependencies(args: Args) {
       const reject = FREEZE_LIST.length === 0 ? '' : `--reject ${FREEZE_LIST.join(',')}`
       console.log('\n')
       console.log(pc.green(pc.bold(`[UPGRADE] ${packageJsonDir}`)))
-      const cmd = `${npmCheckUpdates} -u --dep dev,prod ${reject}`
+      const target = [
+        //
+        updateDepsDev && 'dev',
+        updateDepsProd && 'prod',
+      ]
+        .filter((v) => v !== false)
+        .join(',')
+      const cmd = `${npmCheckUpdates} -u --dep ${target} ${reject}`
       await run__follow(cmd, { cwd: packageJsonDir })
       if (!FREEZE_VUE) {
-        await run__follow(`${npmCheckUpdates} -u --dep dev,prod vue --target greatest`, { cwd: packageJsonDir })
+        await run__follow(`${npmCheckUpdates} -u --dep ${target} vue --target greatest`, { cwd: packageJsonDir })
       }
       noChange = false
     } else {
