@@ -1,3 +1,5 @@
+export type { Args }
+
 import 'source-map-support/register.js'
 import { bumpDependencies, type PackageToBump } from './bumpDependencies.js'
 import { readPackageJson, runCommand, type GlobFilter } from './utils/index.js'
@@ -9,10 +11,11 @@ initPromiseRejectionHandler()
 cli()
 
 async function cli() {
-  const { globFilter, packagesToBump, forceBump } = await parseCliArgs()
-  bumpDependencies(packagesToBump, globFilter, forceBump)
+  const args = await parseCliArgs()
+  bumpDependencies(args)
 }
 
+type Args = Awaited<ReturnType<typeof parseCliArgs>>
 async function parseCliArgs() {
   const globFilter: GlobFilter = {
     include: [],

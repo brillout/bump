@@ -7,6 +7,7 @@ import path from 'path'
 import assert from 'assert'
 import { findFiles, GlobFilter, logProgress, readPackageJson, runCommand } from './utils/index.js'
 import pc from 'picocolors'
+import type { Args } from './cli.js'
 const __filename = new URL('', import.meta.url).pathname
 const __dirname = path.dirname(__filename)
 const npmCheckUpdates = path.join(__dirname, '../node_modules/.bin/npm-check-updates')
@@ -38,10 +39,11 @@ type PackageToBump = {
   packageWasFound?: true
 }
 
-async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: GlobFilter, forceBump: boolean) {
-  let noChange = true
+async function bumpDependencies(args: Args) {
+  const { packagesToBump } = args
 
-  for (const packageJsonFile of await getAllPackageJsonFiles(globFilter)) {
+  let noChange = true
+  for (const packageJsonFile of await getAllPackageJsonFiles(args.globFilter)) {
     /* Re-implement this logic?
     if (!include(packageJsonFile)) {
       skipped.push(packageJsonFile)
@@ -73,7 +75,7 @@ async function bumpDependencies(packagesToBump: PackageToBump[], globFilter: Glo
           const packageSemverCurrent = depList?.[packageName]
           if (!packageSemverCurrent) return
           pkg.packageWasFound = true
-          if (/^[0-9]/.test(packageSemverCurrent) && !forceBump) {
+          if (/^[0-9]/.test(packageSemverCurrent) && !args.forceBump) {
             console.log(
               `${pc.yellow('SKIPPED')} ${pc.cyan(packageName)} because it's pinned to ${pc.bold(packageSemverCurrent)} at ${packageJsonFile}`,
             )
