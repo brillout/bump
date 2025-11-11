@@ -41,6 +41,9 @@ type PackageToBump = {
 
 async function bumpDependencies(args: Args) {
   const { packagesToBump } = args
+  const updateDepsDev = !args.onlyProd || args.onlyDev
+  const updateDepsProd = !args.onlyDev || args.onlyProd
+  const updateDepsPnpmOverrides = !args.onlyDev && !args.onlyProd
 
   let noChange = true
   for (const packageJsonFile of await getAllPackageJsonFiles(args.globFilter)) {
@@ -67,10 +70,10 @@ async function bumpDependencies(args: Args) {
       packagesToBump.forEach((pkg) => {
         const { packageName, packageSemver } = pkg
         const depLists: (undefined | Record<string, string>)[] = [
-          (!args.onlyDev || args.onlyProd) && packageJson.dependencies,
-          (!args.onlyProd || args.onlyDev) && packageJson.devDependencies,
-          !args.onlyDev && !args.onlyProd && packageJson.pnpm?.overrides,
-        ].filter((val) => val !== false)
+          updateDepsProd && packageJson.dependencies,
+          updateDepsDev && packageJson.devDependencies,
+          updateDepsPnpmOverrides && packageJson.pnpm?.overrides,
+        ].filter((v) => v !== false)
         depLists.forEach((depList) => {
           const packageSemverCurrent = depList?.[packageName]
           if (!packageSemverCurrent) return
