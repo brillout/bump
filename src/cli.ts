@@ -25,12 +25,18 @@ async function parseCliArgs() {
 
   let forceBump = false
   let isGlobFilter: undefined | '--include' | '--exclude'
+  let onlyDev = false
+  let onlyProd = false
   for (const arg of process.argv.slice(2)) {
     if (arg.startsWith('-')) {
       if (arg === '--include') {
         isGlobFilter = '--include'
       } else if (arg === '--exclude') {
         isGlobFilter = '--exclude'
+      } else if (arg === '--dev' || arg === '-D') {
+        onlyDev = true
+      } else if (arg === '--prod' || arg === '-P') {
+        onlyProd = true
       } else if (arg === '--force' || arg === '-f') {
         forceBump = true
       } else if (arg === '--version' || arg === '-v') {
@@ -69,6 +75,8 @@ async function parseCliArgs() {
     globFilter,
     packagesToBump,
     forceBump,
+    onlyDev,
+    onlyProd,
   }
 }
 
