@@ -1,3 +1,13 @@
+## [0.2.10](https://github.com/brillout/bump/compare/v0.2.9...v0.2.10) (2025-11-11)
+
+
+### Bug Fixes
+
+* --dev and --prod ([2dc91f5](https://github.com/brillout/bump/commit/2dc91f5eb352fc8076147fa16b39be608db14a06))
+* update --help ([86b674b](https://github.com/brillout/bump/commit/86b674bfdf17348a841ca44ef508b22a0484597d))
+
+
+
 ## [0.2.9](https://github.com/brillout/bump/compare/v0.2.8...v0.2.9) (2025-11-11)
 
 
