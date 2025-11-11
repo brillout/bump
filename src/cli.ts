@@ -109,6 +109,8 @@ function showHelp() {
     [
       'Usage:',
       '  $ bump                         # Bump all dependencies of all the package.json files',
+      '  $ bump -D, --dev               # Bump only devDependencies',
+      '  $ bump -P, --prod              # Bump only dependencies',
       '',
       '  $ bump some-package            # Bump some-package to its latest version',
       "  $ bump some-package --force    # Bump some-package even if it's pinned",
