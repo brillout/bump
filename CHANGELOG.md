@@ -1,3 +1,12 @@
+## [0.2.9](https://github.com/brillout/bump/compare/v0.2.8...v0.2.9) (2025-11-11)
+
+
+### Features
+
+* --dev and --prod ([509c00f](https://github.com/brillout/bump/commit/509c00fef61c86e1cb0144a571d9384c10e93fcc))
+
+
+
 ## [0.2.8](https://github.com/brillout/bump/compare/v0.2.7...v0.2.8) (2025-09-16)
 
 
