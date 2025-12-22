@@ -18,21 +18,17 @@ function runCommand(
   const options = { cwd }
   exec(cmd, options, (err, stdout, stderr) => {
     clearTimeout(t)
-    if (err || stderr) {
-      if (swallowError) {
-        resolvePromise('SWALLOWED_ERROR')
-      } else {
-        if (stdout) {
-          console.log(stdout)
-        }
-        if (stderr) {
-          console.error(stderr)
-        }
-        if (err) {
-          console.error(err)
-        }
-        throw new Error(`Command \`${cmd}\` failed [cwd: ${cwd}]`)
+    if (!swallowError && (err || stderr)) {
+      if (stdout) {
+        console.log(stdout)
       }
+      if (stderr) {
+        console.error(stderr)
+      }
+      if (err) {
+        console.error(err)
+      }
+      throw new Error(`Command \`${cmd}\` failed [cwd: ${cwd}]`)
     } else {
       resolvePromise(stdout)
     }

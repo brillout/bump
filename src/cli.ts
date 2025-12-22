@@ -93,8 +93,20 @@ function parseNpmPackage(input: string): { packageName: string; packageVersion: 
 }
 
 async function getPackageVersionLatest(packageName: string) {
-  const stdout = await runCommand(`npm show ${packageName} version`, { timeout: 20 * 1000 })
-  return stdout.trim()
+  const stdout = await runCommand(`npm show ${packageName} version`, {
+    timeout: 20 * 1000,
+    // Ignore following warnings.
+    // ```shell
+    // $ npm show vike version
+    // npm warn Unknown project config "package-manager-strict". This will stop working in the next major version of npm.
+    // npm warn Unknown project config "link-workspace-packages". This will stop working in the next major version of npm.
+    // 0.4.250
+    // ```
+    swallowError: true,
+  })
+  const version = stdout.trim()
+  if (!version || !version.includes('.')) throw new Error(`Couldn't retrieve last ${packageName} version`)
+  return version
 }
 
 function initPromiseRejectionHandler() {
