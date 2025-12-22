@@ -1,3 +1,12 @@
+## [0.2.11](https://github.com/brillout/bump/compare/v0.2.10...v0.2.11) (2025-12-22)
+
+
+### Bug Fixes
+
+* tolerate npm warning ([9d9b958](https://github.com/brillout/bump/commit/9d9b958ebf1a293bc36b4a2c328621f8e6d645d8))
+
+
+
 ## [0.2.10](https://github.com/brillout/bump/compare/v0.2.9...v0.2.10) (2025-11-11)
 
 
