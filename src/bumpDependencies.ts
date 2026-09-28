@@ -129,7 +129,16 @@ async function bumpDependencies(args: Args) {
 
 async function updatePnpmLockFile() {
   const cwd = process.cwd()
-  await run__return('pnpm install', { cwd })
+  await run__return(
+    [
+      'pnpm install',
+      // Only update pnpm-lock.yaml (which is what we commit) and leave node_modules untouched:
+      // - A full `$ pnpm install` may want to purge node_modules (e.g. `The modules directory at "..." will be removed and reinstalled from scratch. Proceed?`) but pnpm doesn't get a TTY here: pnpm either waits forever on a prompt that isn't shown (pnpm <10.16) or aborts with `ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY` (pnpm >=10.16).
+      // - `--lockfile-only` skips the node_modules validation altogether, and it's also faster (nothing is downloaded, no lifecycle script is run).
+      '--lockfile-only',
+    ].join(' '),
+    { cwd },
+  )
 }
 
 async function commit(commitMessage: string) {
