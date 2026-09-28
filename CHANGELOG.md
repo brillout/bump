@@ -1,3 +1,12 @@
+## [0.2.12](https://github.com/brillout/bump/compare/v0.2.11...v0.2.12) (2026-09-28)
+
+
+### Bug Fixes
+
+* don't hang or crash when pnpm wants to purge node_modules ([#1](https://github.com/brillout/bump/issues/1)) ([8a380ab](https://github.com/brillout/bump/commit/8a380ab4c7638136a8c46432f08ddd8efc99a3ad))
+
+
+
 ## [0.2.11](https://github.com/brillout/bump/compare/v0.2.10...v0.2.11) (2025-12-22)
 
 
@@ -129,6 +138,3 @@
 ### BREAKING CHANGES
 
 * CLI arguments changed.
-
-
-
