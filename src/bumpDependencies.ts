@@ -146,7 +146,7 @@ async function updatePnpmLockFile() {
 async function updateNodeModules() {
   const cwd = process.cwd()
   const done = logProgress('Update `node_modules/`')
-  const { failed, all } = await execa(
+  const { failed } = await execa(
     'pnpm',
     [
       'install',
@@ -154,14 +154,13 @@ async function updateNodeModules() {
       // - `confirmModulesPurge=false` automatically answers yes, like pnpm does in CI. (pnpm 12 doesn't ask.)
       '--config.confirmModulesPurge=false',
     ],
-    { cwd, all: true, reject: false },
+    { cwd, reject: false },
   )
   done(failed)
   if (failed) {
-    console.error(all)
     console.warn(
       pc.yellow(
-        `${pc.bold('$ pnpm install')} failed (see error above): ${pc.bold('node_modules/')} may be out of date.`,
+        `Couldn't update ${pc.bold('node_modules/')} (most likely because user confirmation is needed): try manually running ${pc.bold('$ pnpm install')}`,
       ),
     )
   }
