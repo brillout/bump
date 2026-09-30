@@ -160,7 +160,7 @@ async function updateNodeModules() {
   if (failed) {
     console.warn(
       pc.yellow(
-        `Couldn't update ${pc.bold('node_modules/')} (most likely because user confirmation is needed): try manually running ${pc.bold('$ pnpm install')}`,
+        `Couldn't update ${pc.bold('node_modules/')} (maybe because user confirmation is needed): try manually running ${pc.bold('$ pnpm install')}`,
       ),
     )
   }
