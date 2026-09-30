@@ -1,3 +1,12 @@
+## [0.2.13](https://github.com/brillout/bump/compare/v0.2.12...v0.2.13) (2026-09-30)
+
+
+### Bug Fixes
+
+* update node_modules again ([#2](https://github.com/brillout/bump/issues/2)) ([5100f3d](https://github.com/brillout/bump/commit/5100f3deda60d73bf205a6c4077a1fc91c445840))
+
+
+
 ## [0.2.12](https://github.com/brillout/bump/compare/v0.2.11...v0.2.12) (2026-09-28)
 
 
