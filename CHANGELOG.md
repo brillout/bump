@@ -1,3 +1,12 @@
+## [0.2.14](https://github.com/brillout/bump/compare/v0.2.13...v0.2.14) (2026-10-07)
+
+
+### Bug Fixes
+
+* fix hang on pnpm 9's purge prompt in lockfile step ([25e4b6e](https://github.com/brillout/bump/commit/25e4b6e6dffd23fd386e743a55256fc64064f3d0))
+
+
+
 ## [0.2.13](https://github.com/brillout/bump/compare/v0.2.12...v0.2.13) (2026-09-30)
 
 
