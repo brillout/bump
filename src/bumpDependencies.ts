@@ -135,7 +135,7 @@ async function updatePnpmLockFile() {
     [
       'pnpm install',
       // Only update pnpm-lock.yaml (which is what we commit): node_modules is updated afterwards by updateNodeModules(), which is allowed to fail.
-      // - `--lockfile-only` is faster (nothing is downloaded, no lifecycle script is run). pnpm >=10 also skips the node_modules validation, but pnpm 9 doesn't (see below).
+      // - With `--lockfile-only` pnpm >=10 also skips the node_modules validation, but pnpm 9 doesn't (see below).
       '--lockfile-only',
       // pnpm 9 validates node_modules even with `--lockfile-only`: if node_modules was created by another pnpm version (e.g. with a different store directory), pnpm asks `The modules directories will be removed and reinstalled from scratch. Proceed?` — a prompt the user can neither see nor answer because we capture pnpm's output, so bump hangs forever.
       // - `confirmModulesPurge=false` automatically answers yes: node_modules is re-created by updateNodeModules() anyway.
